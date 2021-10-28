@@ -43,7 +43,7 @@ jobs:
       ResourceGroupName: 'MerazRG'
       SourceSlot: staging
       SwapWithProduction: true
-- job: deploy
+ - job: deploy
   dependsOn: buildandtest
   condition: succeeded()
 
