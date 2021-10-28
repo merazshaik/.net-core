@@ -11,7 +11,7 @@ pool:
 
 variables:
   #buildConfiguration: 'Release'
-  azureSubscription: 'e180c118-f92f-43f3-a0d4-71c288833cb8'
+  azureSubscription: 'DevopsConnection'
   
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
