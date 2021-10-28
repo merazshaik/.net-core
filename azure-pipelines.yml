@@ -10,8 +10,21 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  buildConfiguration: 'Release'
-
+  #buildConfiguration: 'Release'
+  azureSubscription: '9bdecd93-563d-4b75-8ad1-4398a11c6ed3'
+  
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+
+- task: AzureWebApp@1
+  displayName: Azure Web App Deploy
+  inputs:
+    azureSubscription: $(azureSubscription)
+    appName: samplewebapp
+    appType: webAppLinux
+    package: $(System.DefaultWorkingDirectory)/**/*.zip
