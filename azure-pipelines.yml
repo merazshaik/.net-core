@@ -5,50 +5,45 @@
 
 trigger:
 - master
-
-
 variables:
   buildConfiguration: 'Release'
-script:
+stages:
  - script: dotnet build --configuration $(buildConfiguration)
    displayName: 'dotnet build $(buildConfiguration)'
  - task: DotNetCoreCLI@2
    inputs:
      command: 'publish'
      publishWebProjects: true
-stages: 
-- stage: Build
-  displayName: Build stage
-  jobs:
-  - job: buildandtest
-  pool:
-    vmImage: ubuntu-latest
-  steps:
+   jobs:
+   - job: buildandtest
+     pool:
+      vmImage: ubuntu-latest
+     steps:
   # publish an artifact called drop
-  - task: PublishPipelineArtifact@1
-    inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: drop
+     - task: PublishPipelineArtifact@1
+         inputs:
+         targetPath: '$(Build.ArtifactStagingDirectory)' 
+         artifactName: drop
 
   # deploy to Azure Web App staging
-  - task: AzureWebApp@1
-    inputs:
-      azureSubscription: 'DevopsConnection'
-      appType: 'webAppLinux'
-      appName: 'serviceapp'
-      deployToSlotOrASE: true
-      resourceGroupName: <resource group name>
-      slotName: 'staging'
-      package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
-  - task: AzureAppServiceManage@0
-    inputs:
-      azureSubscription: 'DevopsConnection'
-      appType: webAppLinux
-      WebAppName: 'dotnetwebapp'
-      ResourceGroupName: 'MerazRG'
-      SourceSlot: staging
-      SwapWithProduction: true
-  - job: deploy
-    dependsOn: buildandtest
-  condition: succeeded()
+     - task: AzureWebApp@1
+       inputs:
+         azureSubscription: 'DevopsConnection'
+         appType: 'webAppLinux'
+         appName: 'serviceapp'
+         deployToSlotOrASE: true
+         resourceGroupName: <resource group name>
+         slotName: 'staging'
+         package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+     - task: AzureAppServiceManage@0
+       inputs:
+         azureSubscription: 'DevopsConnection'
+         appType: webAppLinux
+         WebAppName: 'dotnetwebapp'
+         ResourceGroupName: 'MerazRG'
+         SourceSlot: staging
+         SwapWithProduction: true
+   - job: deploy
+     dependsOn: buildandtest
+     condition: succeeded()
 
