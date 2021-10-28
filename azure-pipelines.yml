@@ -5,9 +5,15 @@
 
 trigger:
 - master
-
-pool:
-  vmImage: ubuntu-latest
+ stages:
+ - stage: Build
+   jobs:
+   - job: Build
+ - stage: Deploy
+   jobs:
+   - job: Deploy
+     pool:
+       vmImage: ubuntu-latest
 
 variables:
   buildConfiguration: 'Release'
@@ -18,8 +24,9 @@ steps:
 - task: AzureWebApp@1
   displayName: Azure Web App Deploy
   inputs:
+    connectiontype: AzureRM
     azureSubscription: $(azureSubscription)
-    appName: ASP-MerazRG-8567
+    appName: Webapp
     appType: webAppLinux
-    package: $(System.DefaultWorkingDirectory)/**/*.zip
+    package: $(System.DefaultWorkingDirectory)/drop/*.zip
     deploymentMethod: zipDeploy
