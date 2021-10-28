@@ -19,12 +19,6 @@ stages:
      pool:
       vmImage: ubuntu-latest
      steps:
-  # publish an artifact called drop
-     - task: PublishPipelineArtifact@1
-         inputs:
-         targetPath: '$(Build.ArtifactStagingDirectory)' 
-         artifactName: drop
-
   # deploy to Azure Web App staging
      - task: AzureWebApp@1
        inputs:
