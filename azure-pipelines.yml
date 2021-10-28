@@ -19,6 +19,6 @@ steps:
   displayName: Azure Web App Deploy
   inputs:
     azureSubscription: $(azureSubscription)
-    appName: samplewebapp
+    appName: ASP-MerazRG-8567
     appType: webAppLinux
     package: $(System.DefaultWorkingDirectory)/**/*.zip
