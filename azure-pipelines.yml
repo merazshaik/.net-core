@@ -36,7 +36,7 @@ jobs:
       resourceGroupName: <resource group name>
       slotName: 'staging'
       package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
-   - task: AzureAppServiceManage@0
+  - task: AzureAppServiceManage@0
     inputs:
       azureSubscription: 'DevopsConnection'
       appType: webAppLinux
