@@ -15,10 +15,9 @@ steps:
      command: 'publish'
      publishWebProjects: true
 jobs:
-- job: buildandtest
+ - job: buildandtest
   pool:
     vmImage: ubuntu-latest
-
   steps:
   # publish an artifact called drop
   - task: PublishPipelineArtifact@1
@@ -44,7 +43,6 @@ jobs:
       ResourceGroupName: 'MerazRG'
       SourceSlot: staging
       SwapWithProduction: true
-
 - job: deploy
   dependsOn: buildandtest
   condition: succeeded()
