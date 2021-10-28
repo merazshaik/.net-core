@@ -5,17 +5,22 @@
 
 trigger:
 - master
+
+
 variables:
   buildConfiguration: 'Release'
-steps:
+script:
  - script: dotnet build --configuration $(buildConfiguration)
    displayName: 'dotnet build $(buildConfiguration)'
  - task: DotNetCoreCLI@2
    inputs:
      command: 'publish'
      publishWebProjects: true
-jobs:
- - job: buildandtest
+stages: 
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: buildandtest
   pool:
     vmImage: ubuntu-latest
   steps:
@@ -43,7 +48,7 @@ jobs:
       ResourceGroupName: 'MerazRG'
       SourceSlot: staging
       SwapWithProduction: true
- - job: deploy
-  dependsOn: buildandtest
+  - job: deploy
+    dependsOn: buildandtest
   condition: succeeded()
 
